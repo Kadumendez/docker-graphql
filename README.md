@@ -1,73 +1,111 @@
+# Docker Multi-Stage Builds en una API NestJS GraphQL
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" alt="Docker" width="220" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descripción
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este repositorio se usa como ejercicio para practicar Docker sobre una API GraphQL hecha con NestJS que ya existía en el proyecto. El foco principal fue trabajar la imagen con un `Dockerfile` multi-stage y usar el código base como práctica de contenedores.
 
-## Description
+El objetivo del ejercicio es mostrar cómo organizar una imagen de Docker más limpia y mantener los comandos útiles para desarrollo, pruebas y ejecución.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Lo que hice en este proyecto
 
-## Installation
+* Creé el `Dockerfile` para practicar Docker multi-stage.
+* Usé el código NestJS GraphQL que ya estaba en el proyecto como base para probar la construcción y ejecución de la imagen.
+* Conservé los comandos útiles para levantar, probar y validar la aplicación.
+
+## Estructura general
+
+* `src/app.module.ts`: configuración principal de GraphQL y módulos de la aplicación.
+* `src/todo/todo.resolver.ts`: queries, mutations y agregaciones del ejemplo.
+* `src/todo/todo.service.ts`: lógica en memoria para los todos del ejercicio.
+* `Dockerfile`: construcción multi-stage de la imagen.
+
+## Comandos útiles
+
+### Instalar dependencias
 
 ```bash
-$ npm install
+npm install
 ```
 
-## Running the app
+### Ejecutar la aplicación
 
 ```bash
-# development
-$ npm run start
+# desarrollo
+npm run start
 
-# watch mode
-$ npm run start:dev
+# modo observador
+npm run start:dev
 
-# production mode
-$ npm run start:prod
+# depuración
+npm run start:debug
+
+# producción
+npm run start:prod
 ```
 
-## Test
+### Compilar y validar
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run build
+npm run lint
 ```
 
-## Support
+### Pruebas
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+# pruebas unitarias
+npm run test
 
-## Stay in touch
+# pruebas en modo watch
+npm run test:watch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# cobertura
+npm run test:cov
 
-## License
+# pruebas e2e
+npm run test:e2e
+```
 
-Nest is [MIT licensed](LICENSE).
+### Formateo
+
+```bash
+npm run format
+```
+
+## Docker
+
+### Construir la imagen
+
+```bash
+docker build -t tu_usuario/graphql-actions:latest .
+```
+
+### Construcción multi-plataforma con Buildx
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t tu_usuario/graphql-actions:latest .
+```
+
+### Ejecutar el contenedor
+
+```bash
+docker run --name graphql-actions -p 3000:3000 tu_usuario/graphql-actions:latest
+```
+
+### Ver historial de capas
+
+```bash
+docker history tu_usuario/graphql-actions:latest
+```
+
+## Nota
+
+El esquema GraphQL se genera automáticamente en `src/schema.gql`, así que conviene volver a compilar la aplicación después de hacer cambios en resolvers, inputs o entidades.
+
+---
+
+*Proyecto de práctica enfocado en Docker, usando una API NestJS GraphQL como base de prueba.*
